@@ -16,7 +16,7 @@ namespace BookProject.API.Controllers
         }
 
         [HttpGet("AllBooks")]
-        public IActionResult GetBooks(int pageSize=5, int pageNum=1, string sortOrder="asc")
+        public IActionResult GetBooks(int pageSize=6, int pageNum=1, string sortOrder="asc")
         {
             var booksQuery = _context.Books.AsQueryable();
             if (sortOrder.ToLower() == "desc")
