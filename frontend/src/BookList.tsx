@@ -23,7 +23,6 @@ function BookList() {
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center mb-4">Book List</h1>
 
       {/* Sorting Dropdown */}
       <div className="d-flex justify-content-center mb-3">
