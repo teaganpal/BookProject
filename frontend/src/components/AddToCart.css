@@ -1,0 +1,5 @@
+/* Change spinner arrows to black */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  filter: invert(1); /* Makes arrows black */
+}

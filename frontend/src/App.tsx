@@ -1,4 +1,6 @@
 import './App.css';
+import { CartProvider } from './context/CartContext';
+import AddToCartPage from './pages/AddToCartPage';
 import BooksPage from './pages/BooksPage';
 import CartPage from './pages/CartPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -9,12 +11,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<BooksPage />} />
-          <Route path="/cart" element={<CartPage />} />
-        </Routes>
-      </Router>
+      <CartProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<BooksPage />} />
+            <Route path="/addToCart/:title/:bookID/:price" element={<AddToCartPage />} />
+            <Route path="/cart" element={<CartPage />} />
+          </Routes>
+        </Router>
+      </CartProvider>
     </>
   );
 }

@@ -15,19 +15,26 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = (item: CartItem) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((c) => c.projectId === item.projectId);
-      const updatedCart = prevCart.map((c) =>
-        c.projectId === item.projectId
-          ? { ...c, donationAmount: c.donationAmount + item.donationAmount }
-          : c
-      );
-
-      return existingItem ? updatedCart : [...prevCart, item];
+      const existingItem = prevCart.find((c) => c.bookID === item.bookID);
+      
+      if (existingItem) {
+        return prevCart.map((c) =>
+          c.bookID === item.bookID
+            ? { 
+                ...c, 
+                quantity: c.quantity + item.quantity, 
+                subtotal: (c.quantity + item.quantity) * c.price // Update subtotal
+              }
+            : c
+        );
+      } else {
+        return [...prevCart, { ...item, subtotal: item.quantity * item.price }];
+      }
     });
   };
 
-  const removeFromCart = (projectId: number) => {
-    setCart((prevCart) => prevCart.filter((c) => c.projectId !== projectId));
+  const removeFromCart = (bookID: number) => {
+    setCart((prevCart) => prevCart.filter((c) => c.bookID !== bookID));
   };
 
   const clearCart = () => {
