@@ -3,6 +3,9 @@ import BooksPage from './pages/BooksPage';
 import CartPage from './pages/CartPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+// Bootstrap extras:
+// added ...
+
 function App() {
   return (
     <>
@@ -12,7 +15,6 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
         </Routes>
       </Router>
-      <BooksPage />
     </>
   );
 }
