@@ -16,9 +16,17 @@ namespace BookProject.API.Controllers
         }
 
         [HttpGet("AllBooks")]
-        public IActionResult GetBooks(int pageSize=6, int pageNum=1, string sortOrder="asc")
+        public IActionResult GetBooks(int pageSize=6, int pageNum=1, string sortOrder="asc", [FromQuery] List<string>? category = null)
         {
+            // var query = _context.Books.AsQueryable();
             var booksQuery = _context.Books.AsQueryable();
+
+            if (category != null)
+            {
+                booksQuery = booksQuery.Where(c => category.Contains(c.Category));
+            }
+            
+            
             if (sortOrder.ToLower() == "desc")
             {
                 booksQuery = booksQuery.OrderByDescending(b => b.Title);
@@ -27,12 +35,13 @@ namespace BookProject.API.Controllers
             {
                 booksQuery = booksQuery.OrderBy(b => b.Title);
             }
+            
+            var totalNumBooks = booksQuery.Count();
+            
             var someItem = booksQuery
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-            
-            var totalNumBooks = _context.Books.Count();
 
             var pageObject = new
             {
