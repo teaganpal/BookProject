@@ -18,7 +18,7 @@ function BooksPage() {
             setSelectedCategories={setSelectedCategories}
           />
         </div>
-        <div className="col-md-9">
+        <div className="col-md-9 d-flex flex-column align-items-center">
           <BookList selectedCategories={selectedCategories} />
         </div>
       </div>

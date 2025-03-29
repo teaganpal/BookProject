@@ -22,7 +22,7 @@ function CartPage() {
                 <li key={item.bookID} className="list-group-item d-flex justify-content-between align-items-center">
                   <div>
                     <h6 className="mb-1">{item.title}</h6>
-                    <p className="mb-0">
+                    <p className="mb-0 p-2">
                       <span className="text-muted">Price:</span> ${item.price.toFixed(2)}
                       {' | '}
                       <span className="text-muted">Quantity:</span> {item.quantity}

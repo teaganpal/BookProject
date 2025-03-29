@@ -42,35 +42,44 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
       </div>
 
       {/* Book Cards */}
-      <div className="row">
-        {books.map((b) => (
-          <div key={b.bookID} className={`col-12 ${books.length === 1 ? 'col-md-8 col-lg-6' : books.length === 2 ? 'col-md-6' : 'col-md-6 col-lg-4'}`}
-    >
-      <div className="card shadow-sm mb-3">
-        <div className="card-header bg-primary text-white">
-          <h5 className="mb-0">{b.title}</h5>
-        </div>
-        <div className="card-body">
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item"><strong>Author:</strong> {b.author}</li>
-            <li className="list-group-item"><strong>Publisher:</strong> {b.publisher}</li>
-            <li className="list-group-item"><strong>ISBN:</strong> {b.isbn}</li>
-            <li className="list-group-item"><strong>Classification:</strong> {b.classification}</li>
-            <li className="list-group-item"><strong>Category:</strong> {b.category}</li>
-            <li className="list-group-item"><strong>Page Count:</strong> {b.pageCount}</li>
-            <li className="list-group-item"><strong>Price:</strong> ${b.price}</li>
-          </ul>
-          <button
-            className="btn btn-success w-100"
-            onClick={() => navigate(`/addToCart/${b.title}/${b.bookID}/${b.price}`)}
-          >
-            Add To Cart
-          </button>
+      <div className="row justify-content-center">
+  {books.length === 0 ? (
+    <div className="col-12 text-center">
+      <p className="fw-bold text-muted">No books found.</p>
+    </div>
+  ) : (
+    books.map((b, index) => (
+      <div 
+        key={b.bookID} 
+        className={`col-12 ${books.length === 1 ? 'col-md-8' : books.length === 2 ? 'col-md-6' : 'col-md-6 col-lg-4'}`}
+      >
+        <div className="card shadow-sm mb-3">
+          <div className="card-header bg-primary text-white">
+            <h5 className="mb-0">{b.title}</h5>
+          </div>
+          <div className="card-body">
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item"><strong>Author:</strong> {b.author}</li>
+              <li className="list-group-item"><strong>Publisher:</strong> {b.publisher}</li>
+              <li className="list-group-item"><strong>ISBN:</strong> {b.isbn}</li>
+              <li className="list-group-item"><strong>Classification:</strong> {b.classification}</li>
+              <li className="list-group-item"><strong>Category:</strong> {b.category}</li>
+              <li className="list-group-item"><strong>Page Count:</strong> {b.pageCount}</li>
+              <li className="list-group-item"><strong>Price:</strong> ${b.price}</li>
+            </ul>
+            <button
+              className="btn btn-success w-100"
+              onClick={() => navigate(`/addToCart/${b.title}/${b.bookID}/${b.price}`)}
+            >
+              Add To Cart
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  ))}
+    ))
+  )}
 </div>
+
 
       {/* Pagination */}
       <nav className="d-flex justify-content-center mt-3">
