@@ -1,6 +1,7 @@
 import './App.css';
 import { CartProvider } from './context/CartContext';
 import AddToCartPage from './pages/AddToCartPage';
+import AdminBooksPage from './pages/AdminBooksPage';
 import BooksPage from './pages/BooksPage';
 import CartPage from './pages/CartPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -29,6 +30,7 @@ function App() {
               element={<AddToCartPage />}
             />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/adminbooks" element={<AdminBooksPage />} />
           </Routes>
         </Router>
       </CartProvider>

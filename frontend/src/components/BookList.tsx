@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Book } from '../types/Book';
 import { useNavigate } from 'react-router-dom';
+import { fetchBooks } from '../api/BooksAPI';
+import Pagination from './Pagination';
 
 function BookList({ selectedCategories }: { selectedCategories: string[] }) {
   const [books, setBooks] = useState<Book[]>([]);
@@ -9,23 +11,34 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      const categoryParams = selectedCategories
-        .map((cat) => `category=${encodeURIComponent(cat)}`)
-        .join('&');
-      const response = await fetch(
-        `https://localhost:5000/Book/AllBooks?pageSize=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}${selectedCategories.length ? `&${categoryParams}` : ''}`
-      );
-      const data = await response.json();
-      setBooks(data.books);
-      setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
+    const loadBooks = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchBooks(
+          pageSize,
+          pageNum,
+          selectedCategories,
+          sortOrder
+        );
+
+        setBooks(data.books);
+        setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchBooks();
+    loadBooks();
   }, [pageSize, pageNum, sortOrder, selectedCategories]);
 
+  if (loading) return <p>Loading books...</p>;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
   return (
     <div className="container mt-4">
       {/* Sorting Dropdown */}
@@ -95,61 +108,17 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
           ))
         )}
       </div>
-
-      {/* Pagination */}
-      <nav className="d-flex justify-content-center mt-3">
-        <ul className="pagination">
-          <li className={`page-item ${pageNum === 1 ? 'disabled' : ''}`}>
-            <button
-              className="page-link"
-              onClick={() => setPageNum(pageNum - 1)}
-            >
-              Previous
-            </button>
-          </li>
-
-          {[...Array(totalPages)].map((_, index) => (
-            <li
-              key={index + 1}
-              className={`page-item ${pageNum === index + 1 ? 'active' : ''}`}
-            >
-              <button
-                className="page-link"
-                onClick={() => setPageNum(index + 1)}
-              >
-                {index + 1}
-              </button>
-            </li>
-          ))}
-
-          <li
-            className={`page-item ${pageNum === totalPages ? 'disabled' : ''}`}
-          >
-            <button
-              className="page-link"
-              onClick={() => setPageNum(pageNum + 1)}
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Page Size Selector */}
-      <div className="d-flex justify-content-center mt-3">
-        <label className="me-2 fw-bold">Results per page:</label>
-        <select
-          className="form-select w-auto"
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
+      <div>
+        <Pagination
+          currentPage={pageNum}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageChange={setPageNum}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize);
             setPageNum(1);
           }}
-        >
-          <option value="6">6</option>
-          <option value="15">15</option>
-          <option value="21">21</option>
-        </select>
+        />
       </div>
     </div>
   );
